@@ -1,66 +1,195 @@
 # Flight Delay Prediction API
 
 ## Overview
-This project serves a machine learning model as a **web API** to predict departure delays for flights departing from Atlanta (ATL).
-It was originally developed for WGU’s **MSDA D602 Task 3**, and demonstrates **end-to-end model deployment** using FastAPI.
 
-The goal is to show how a predictive model can be deployed as a production-ready service that accepts live inputs and returns results instantly.
+This project deploys a machine learning model as a REST API capable of predicting flight departure delays for flights departing from Atlanta (ATL).
 
-## Project Highlights
-- Machine learning model: Ridge regression with polynomial features (trained on ATL flight delay data)
-- API: FastAPI REST endpoint serving predictions in real-time
-- Testing: Unit tests included to validate prediction logic
-- Experiment tracking: MLflow used to track training runs and model performance
+Originally developed as part of WGU’s MSDA D602 course, the project demonstrates an end-to-end machine learning deployment workflow including:
 
-## Tools & Libraries
-- FastAPI – web framework for building the REST API
-- scikit-learn – Ridge regression model
-- MLflow – experiment tracking
-- Pandas / NumPy – data preparation
-- Uvicorn – ASGI server for running the API
+- data preprocessing
+- model training
+- experiment tracking with MLflow
+- API deployment using FastAPI
+- automated API testing
 
-## Key Files
-- `main.py` – API entry point (prediction endpoint lives here)
-- `utils.py` – helper functions for preprocessing & predictions
-- `ridge_model.pkl` – trained Ridge regression model
-- `exploration.ipynb` – notebook for data exploration & feature engineering
-- `test_api.py` – unit tests for the API
-- `requirements.txt` – dependencies
-- `README.md` – project documentation
+The application accepts flight information as input and returns a predicted departure delay in real time.
 
-## How to Run Locally
-Clone the repo:
+---
 
-    git clone https://github.com/crystalmford/flight-delay-prediction-api.git
-    cd flight-delay-prediction-api
+# Features
 
-Install dependencies:
+- FastAPI REST API for live predictions
+- Ridge Regression model with polynomial feature engineering
+- MLflow experiment tracking
+- Automated API testing with pytest
+- Docker support for containerized deployment
+- Scikit-learn preprocessing pipelines
 
-    pip install -r requirements.txt
+---
 
-Start the API:
+# Tech Stack
 
-    uvicorn main:app --reload
+| Tool | Purpose |
+|---|---|
+| Python | Core programming language |
+| FastAPI | REST API framework |
+| scikit-learn | Machine learning pipeline |
+| MLflow | Experiment tracking |
+| Pandas / NumPy | Data processing |
+| Uvicorn | ASGI server |
+| pytest | API testing |
+| Docker | Containerized deployment |
 
-Send a sample request:
+---
 
-    curl -X POST "http://127.0.0.1:8000/predict" \
-    -H "Content-Type: application/json" \
-    -d '{"month": 6, "day": 15, "hour": 14, "airline": "DL", "destination": "LAX"}'
+# Project Structure
+
+```text
+flight-delay-prediction-api/
+│
+├── main.py
+├── utils.py
+├── mlflow_experiment.py
+├── requirements.txt
+├── Dockerfile
+├── ridge_model.pkl
+├── exploration.ipynb
+├── test_api.py
+├── data/
+└── README.md
+```
+
+---
+
+# API Endpoint
+
+## Predict Flight Delay
+
+**POST** `/predict`
+
+Example request:
+
+```json
+{
+  "month": 6,
+  "day": 15,
+  "hour": 14,
+  "airline": "DL",
+  "destination": "LAX"
+}
+```
 
 Example response:
 
-    {
-      "predicted_delay": 12.5
-    }
+```json
+{
+  "predicted_delay": 12.5
+}
+```
 
-## Notes
-- Built as part of **WGU MSDA D602 Task 3** (educational project).
-- Dataset: flights departing Atlanta (ATL).
-- Model: Ridge regression with polynomial features.
+---
 
-## Key Takeaways
-- Demonstrates how to deploy ML models with FastAPI.
-- Shows how APIs can turn predictive models into usable services.
-- Includes testing and experiment tracking for reproducibility.
+# Running the Project Locally
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/crystalmford/flight-delay-prediction-api.git
+cd flight-delay-prediction-api
+```
+
+---
+
+## 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 3. Start the FastAPI Server
+
+```bash
+uvicorn main:app --reload
+```
+
+API available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+Interactive Swagger docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# Running with Docker
+
+Build the container:
+
+```bash
+docker build -t flight-delay-api .
+```
+
+Run the container:
+
+```bash
+docker run -p 8000:8000 flight-delay-api
+```
+
+---
+
+# Running Tests
+
+```bash
+pytest
+```
+
+---
+
+# MLflow Experiment Tracking
+
+The project uses MLflow to:
+
+- track model parameters
+- log evaluation metrics
+- store experiment runs
+- manage trained model artifacts
+
+To run the training script:
+
+```bash
+python mlflow_experiment.py
+```
+
+---
+
+# Dataset Notes
+
+This project uses cleaned flight delay data for flights departing from Atlanta (ATL).
+
+Dataset files may not be included in the repository due to size or coursework restrictions.
+
+Expected dataset location:
+
+```text
+data/cleaned_data.csv
+```
+
+---
+
+# Key Takeaways
+
+This project demonstrates practical machine learning deployment concepts including:
+
+- serving ML models through APIs
+- preprocessing pipelines
+- experiment tracking
+- automated testing
+- containerization with Docker
 
