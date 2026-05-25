@@ -7,16 +7,22 @@ app = FastAPI()
 
 # Load the trained model
 with open("model.pkl", "rb") as model_file:
-
-
     model = pickle.load(model_file)
 
-# Define valid airport codes
-VALID_AIRPORTS = {"JFK", "LAX", "ORD", "ATL", "DFW"}  # Add more as needed
+# Define valid airport codes used for simple input validation
+VALID_AIRPORTS = {"JFK", "LAX", "ORD", "ATL", "DFW"}
+
+
+def convert_time_to_decimal(time_str: str) -> float:
+    """Convert HH:MM time format into decimal hours."""
+    hours, minutes = time_str.split(":")
+    return int(hours) + int(minutes) / 60
+
 
 @app.get("/")
 def read_root():
     return {"message": "API is up and running!"}
+
 
 @app.get("/predict/delays")
 def predict_delays(
@@ -26,22 +32,33 @@ def predict_delays(
     arrival_time: str
 ):
     try:
-        # Validate airport codes
         if departure_airport not in VALID_AIRPORTS or arrival_airport not in VALID_AIRPORTS:
-            return JSONResponse(status_code=400, content={"error": "Invalid airport code"})
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Invalid airport code"}
+            )
 
-        # Convert time inputs from HH:MM format to float (e.g., "12:30" → 12.5)
-        departure_time_float = float(departure_time.replace(":", "."))
-        arrival_time_float = float(arrival_time.replace(":", "."))
+        departure_time_float = convert_time_to_decimal(departure_time)
+        arrival_time_float = convert_time_to_decimal(arrival_time)
 
-        # Create input DataFrame with correct format
         input_data = pd.DataFrame(
-            [[departure_airport, arrival_airport, departure_time_float, arrival_time_float]],
-            columns=["ORIGIN_AIRPORT", "DEST_AIRPORT", "SCHEDULED_DEPARTURE", "SCHEDULED_ARRIVAL"]
+            [[arrival_airport, departure_time_float, arrival_time_float]],
+            columns=[
+                "DEST_AIRPORT",
+                "SCHEDULED_DEPARTURE",
+                "SCHEDULED_ARRIVAL"
+            ]
         )
 
-        # Make prediction
         prediction = model.predict(input_data)[0]
+
+        return {"predicted_delay_minutes": round(float(prediction), 2)}
+
+    except ValueError:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "Invalid time format. Use HH:MM, such as 12:30."}
+        )
 
         return {"predicted_delay_minutes": prediction}
 
