@@ -36,6 +36,10 @@ def predict_delays(
     arrival_time: str
 ):
     try:
+        # Normalize airport codes
+        departure_airport = departure_airport.upper()
+        arrival_airport = arrival_airport.upper()
+
         # Validate airport codes
         if (
             departure_airport not in VALID_AIRPORTS
