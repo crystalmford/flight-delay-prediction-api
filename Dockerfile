@@ -4,14 +4,16 @@ FROM python:3.10-slim
 # Set working directory in the container
 WORKDIR /app
 
-# Copy dependencies
+# Copy dependencies first for better Docker caching
 COPY requirements.txt .
+
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
-COPY ../../d602-deployment-task-3/flight_delay_prediction_api .
+# Copy the application code into the container
+COPY . .
 
-# Expose FastAPI's default port
+# Expose FastAPI port
 EXPOSE 8000
 
 # Run FastAPI with Uvicorn
