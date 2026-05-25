@@ -4,7 +4,7 @@
 
 This project deploys a machine learning model as a REST API capable of predicting flight departure delays for flights departing from Atlanta (ATL).
 
-Originally developed as part of WGU’s MSDA D602 course, the project demonstrates an end-to-end machine learning deployment workflow including:
+This project demonstrates an end-to-end machine learning deployment workflow including:
 
 - data preprocessing
 - model training
@@ -13,7 +13,6 @@ Originally developed as part of WGU’s MSDA D602 course, the project demonstrat
 - automated API testing
 
 The application accepts flight information as input and returns a predicted departure delay in real time.
-
 ---
 
 # Swagger Documentation
