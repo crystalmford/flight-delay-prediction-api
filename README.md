@@ -16,6 +16,16 @@ The application accepts flight information as input and returns a predicted depa
 
 ---
 
+# Swagger Documentation
+
+FastAPI automatically generates interactive API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
 # Features
 
 - FastAPI REST API for live predictions
@@ -48,14 +58,11 @@ The application accepts flight information as input and returns a predicted depa
 flight-delay-prediction-api/
 │
 ├── main.py
-├── utils.py
 ├── mlflow_experiment.py
 ├── requirements.txt
 ├── Dockerfile
-├── ridge_model.pkl
-├── exploration.ipynb
-├── test_api.py
-├── data/
+├── model.pkl
+├── test_main.py
 └── README.md
 ```
 
@@ -65,25 +72,19 @@ flight-delay-prediction-api/
 
 ## Predict Flight Delay
 
-**POST** `/predict`
+**GET** `/predict/delays`
 
 Example request:
 
-```json
-{
-  "month": 6,
-  "day": 15,
-  "hour": 14,
-  "airline": "DL",
-  "destination": "LAX"
-}
+```text
+http://127.0.0.1:8000/predict/delays?departure_airport=JFK&arrival_airport=LAX&departure_time=14:00&arrival_time=17:30
 ```
 
 Example response:
 
 ```json
 {
-  "predicted_delay": 12.5
+  "predicted_delay_minutes": 12.5
 }
 ```
 
@@ -171,14 +172,14 @@ python mlflow_experiment.py
 
 # Dataset Notes
 
-This project uses cleaned flight delay data for flights departing from Atlanta (ATL).
+This project was trained using cleaned flight delay data for flights departing from Atlanta (ATL).
 
-Dataset files may not be included in the repository due to size or coursework restrictions.
+The training dataset is not included in the repository.
 
-Expected dataset location:
+The deployed API uses the serialized trained model stored in:
 
 ```text
-data/cleaned_data.csv
+model.pkl
 ```
 
 ---
@@ -192,4 +193,3 @@ This project demonstrates practical machine learning deployment concepts includi
 - experiment tracking
 - automated testing
 - containerization with Docker
-
