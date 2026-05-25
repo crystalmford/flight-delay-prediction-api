@@ -7,7 +7,7 @@ logs metrics and parameters to MLflow, and saves the trained model locally.
 """
 
 import os
-import shutil
+import pickle
 
 import mlflow
 import mlflow.sklearn
@@ -85,12 +85,11 @@ with mlflow.start_run():
 
     print(f"MLflow experiment completed. RMSE: {rmse:.2f}")
 
-# Save model locally
-model_path = os.path.join("models", "polynomial_regression_model")
+# Save model locally for the FastAPI app
+model_path = "model.pkl"
 
-if os.path.exists(model_path):
-    shutil.rmtree(model_path)
-
-mlflow.sklearn.save_model(pipeline, model_path)
+with open(model_path, "wb") as model_file:
+    pickle.dump(pipeline, model_file)
 
 print(f"Model saved locally at: {model_path}")
+
