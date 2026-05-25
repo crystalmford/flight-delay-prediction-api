@@ -13,6 +13,7 @@ This project demonstrates an end-to-end machine learning deployment workflow inc
 - automated API testing
 
 The application accepts flight information as input and returns a predicted departure delay in real time.
+
 ---
 
 # Swagger Documentation
@@ -62,6 +63,7 @@ flight-delay-prediction-api/
 ├── Dockerfile
 ├── model.pkl
 ├── test_main.py
+├── flight_delay_prediction_walkthrough.ipynb
 └── README.md
 ```
 
